@@ -29,6 +29,10 @@ The latest version of this library can always be found at
 http://arduiniana.org.
 */
 
+#define NOT_USE_PCINT1
+#define NOT_USE_PCINT2
+#define NOT_USE_PCINT3
+
 // When set, _DEBUG co-opts pins 11 and 13 for debugging with an
 // oscilloscope or logic analyzer.  Beware: it also slightly modifies
 // the bit times, so don't rely on it too much at high baud rates
@@ -222,23 +226,31 @@ inline void SoftwareSerial_by_YO::handle_interrupt()
   }
 }
 
-#if defined(PCINT0_vect) && defined(USE_PCINT0)
+#ifdef PCINT0_vect
+#ifndef NOT_USE_PCINT0
 ISR(PCINT0_vect)
 {
   SoftwareSerial_by_YO::handle_interrupt();
 }
 #endif
+#endif
 
-#if defined(PCINT1_vect) && defined(USE_PCINT1)
+#ifdef PCINT1_vect
+#ifndef NOT_USE_PCINT1
 ISR(PCINT1_vect, ISR_ALIASOF(PCINT0_vect));
 #endif
-
-#if defined(PCINT2_vect) && defined(USE_PCINT2)
-ISR(PCINT2_vect, ISR_ALIASOF(PCINT0_vect));
 #endif
 
-#if defined(PCINT3_vect) && defined(USE_PCINT3)
+#ifdef PCINT2_vect
+#ifndef NOT_USE_PCINT2
+ISR(PCINT2_vect, ISR_ALIASOF(PCINT0_vect));
+#endif
+#endif
+
+#ifdef PCINT3_vect
+#ifndef NOT_USE_PCINT3
 ISR(PCINT3_vect, ISR_ALIASOF(PCINT0_vect));
+#endif
 #endif
 
 //
